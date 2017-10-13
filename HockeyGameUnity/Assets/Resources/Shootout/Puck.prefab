@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 114957198882418628}
   - component: {fileID: 61163134768929778}
   - component: {fileID: 50017557916290310}
+  - component: {fileID: 114279784661108788}
   m_Layer: 0
   m_Name: Puck
-  m_TagString: Untagged
+  m_TagString: Puck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,7 +51,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1638208094004682}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -77,6 +78,17 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.89, y: 0.64}
+--- !u!114 &114279784661108788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1638208094004682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5bd1e7f546fd347ae7ea2273553222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114957198882418628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,7 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82477274fd7b93e4388c30931c73c83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrowSprite: {fileID: 0}
 --- !u!212 &212180669543309888
 SpriteRenderer:
   m_ObjectHideFlags: 1

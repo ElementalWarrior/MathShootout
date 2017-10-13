@@ -31,9 +31,14 @@ public class PuckMovementBehaviour : MonoBehaviour {
             newColor.a = Mathf.Max(0, (float)(1 - secondsSincefadeStart));
             GetComponent<SpriteRenderer>().color = newColor;
         }
+        //dirty way to remove puck after faded out.
+        if (GetComponent<SpriteRenderer>().color.a < 0.001)
+        {
+            GameObject.Destroy(gameObject);
+        }
         //stop y position if it hits the position of the backboard.
         //and not inside the net
-        if(Mathf.Abs(transform.position.x) < 2.5 && transform.position.y > 1.5)
+        if (Mathf.Abs(transform.position.x) < 2.5 && transform.position.y > 1.5)
         {
             _restrictYVelocity = true;
         }
