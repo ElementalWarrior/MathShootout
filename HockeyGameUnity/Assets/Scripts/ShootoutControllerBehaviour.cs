@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShootoutControllerBehaviour : MonoBehaviour {
 
@@ -24,4 +25,10 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void IncrementScore(int add)
+    {
+        int currentValue = int.Parse(GameObject.Find("ScoreNumber").GetComponent<Text>().text);
+        GameObject.Find("ScoreNumber").GetComponent<Text>().text = (currentValue + add).ToString();
+    }
 }
