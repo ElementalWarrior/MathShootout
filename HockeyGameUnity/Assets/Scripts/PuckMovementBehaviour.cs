@@ -14,6 +14,14 @@ public class PuckMovementBehaviour : MonoBehaviour {
     {
         timeFadeStart = DateTime.Now;
     }
+
+    //take a color and set the opacity
+    private Color SetOpacity(Color c, float opacity)
+    {
+        Color newColor = c;
+        newColor.a = Mathf.Max(0, opacity);
+        return newColor;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -27,9 +35,11 @@ public class PuckMovementBehaviour : MonoBehaviour {
         if (timeFadeStart != null)
         {
             double secondsSincefadeStart = (DateTime.Now - timeFadeStart.Value).TotalSeconds;
-            Color newColor = GetComponent<SpriteRenderer>().color;
-            newColor.a = Mathf.Max(0, (float)(1 - secondsSincefadeStart));
-            GetComponent<SpriteRenderer>().color = newColor;
+            GetComponent<SpriteRenderer>().color = SetOpacity(GetComponent<SpriteRenderer>().color, (float)(1 - secondsSincefadeStart));
+
+            //the text opacity is not depenedet on the puck sprite, so we need to fade that too
+            UnityEngine.UI.Text txt = GetComponentsInChildren<UnityEngine.UI.Text>()[0];
+            txt.color = SetOpacity(txt.color, (float)(1 - secondsSincefadeStart));
         }
         //dirty way to remove puck after faded out.
         if (GetComponent<SpriteRenderer>().color.a < 0.001)
