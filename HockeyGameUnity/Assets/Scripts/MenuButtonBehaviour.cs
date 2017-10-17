@@ -17,7 +17,7 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void Play()
     {
-        SceneManager.LoadScene("Shootout");
+        SceneManager.LoadScene("Difficulty");
     }
 
     public void Quit()
@@ -28,5 +28,25 @@ public class MenuButtonBehaviour : MonoBehaviour {
     public void Credits()
     {
         SceneManager.LoadScene("Credits");
+    }
+
+    public void Easy()
+    {
+        ShootoutControllerBehaviour.DifficultySetting = ShootoutControllerBehaviour.Difficulty.Easy;
+        SceneManager.LoadScene("Shootout");
+    }
+
+    public void Medium()
+    {
+        ShootoutControllerBehaviour.DifficultySetting = ShootoutControllerBehaviour.Difficulty.Medium;
+        SceneManager.LoadScene("Shootout");
+
+    }
+
+    public void Hard()
+    {
+        ShootoutControllerBehaviour.DifficultySetting = ShootoutControllerBehaviour.Difficulty.Hard;
+        SceneManager.LoadScene("Shootout");
+
     }
 }

@@ -22,12 +22,24 @@ public class NetBehaviour : MonoBehaviour {
             collider.GetComponent<PuckMovementBehaviour>().Fadeout();
             collider.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             int puckValue = collider.GetComponentInChildren<PuckMathBehaviour>().Number;
-            if (tag == "NetEven" && puckValue % 2 == 0)
+            if (tag == "NetEven" )
             {
-                ShootoutControllerBehaviour.Controller.IncrementScore(5);
-            } else if (tag == "NetOdd" && puckValue % 2 == 1)
+                if(puckValue % 2 == 0)
+                {
+                    ShootoutControllerBehaviour.Controller.IncrementScore(5);
+                } else
+                {
+                    ShootoutControllerBehaviour.Controller.IncrementScore(-2);
+                }
+            } else if (tag == "NetOdd")
             {
-                ShootoutControllerBehaviour.Controller.IncrementScore(5);
+                if (puckValue % 2 == 1)
+                {
+                    ShootoutControllerBehaviour.Controller.IncrementScore(5);
+                } else
+                {
+                    ShootoutControllerBehaviour.Controller.IncrementScore(-2);
+                }
             }
         }
     }
