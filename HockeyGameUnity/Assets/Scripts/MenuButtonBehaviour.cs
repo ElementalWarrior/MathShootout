@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuButtonBehaviour : MonoBehaviour {
 
@@ -17,6 +19,19 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void Play()
     {
+        if(String.IsNullOrEmpty(PlayerPrefs.GetString("TeamName")))
+        {
+            SceneManager.LoadScene("TeamName");
+        } else
+        {
+            SceneManager.LoadScene("Standings");
+        }
+    }
+
+    public void ChooseName()
+    {
+        Debug.Log(GameObject.Find("InputField").GetComponent<InputField>().text);
+        PlayerPrefs.SetString("TeamName", GameObject.Find("InputField").GetComponent<InputField>().text);
         SceneManager.LoadScene("Difficulty");
     }
 

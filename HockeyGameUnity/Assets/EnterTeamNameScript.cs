@@ -9,7 +9,6 @@ public class EnterTeamNameScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PlayerPrefs.SetString ("TeamName", GameObject.Find ("PathToTheGameObject").GetComponent<InputField> ().text);
 	}
 	
 	// Update is called once per frame
