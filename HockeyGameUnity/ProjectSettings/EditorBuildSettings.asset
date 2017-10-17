@@ -19,3 +19,5 @@ EditorBuildSettings:
     path: Assets/Scenes/TeamName.unity
   - enabled: 1
     path: Assets/Scenes/Standings.unity
+  - enabled: 1
+    path: Assets/Scenes/MatchEnd.unity
