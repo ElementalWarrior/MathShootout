@@ -19,10 +19,36 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     public DateTime StartedAt;
     public DateTime FinishAt;
     public GameObject TimerNumber;
+    public int ScoreToBeat;
+    public int TimerDebugSkip = 0;
+
+    StandingsBehaviour.Round CurrentRound;
 
     // Use this for initialization
     void Start ()
     {
+
+        if (!PlayerPrefs.HasKey("CurrentRound"))
+        {
+            CurrentRound = StandingsBehaviour.Round.QuarterFinal;
+        }
+        else
+        {
+            CurrentRound = JsonUtility.FromJson<StandingsBehaviour.Round>(PlayerPrefs.GetString("CurrentRound"));
+        }
+
+        if(CurrentRound == StandingsBehaviour.Round.QuarterFinal)
+        {
+            ScoreToBeat = 225;
+        } else if(CurrentRound == StandingsBehaviour.Round.SemiFinal)
+        {
+            ScoreToBeat = 250;
+        }
+        else if (CurrentRound == StandingsBehaviour.Round.Finals)
+        {
+            ScoreToBeat = 275;
+        }
+
         Controller = this;
         ArrowSprite = GameObject.Find("ArrowSprite");
         ArrowSprite.SetActive(false);
@@ -38,10 +64,12 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
         switch (DifficultySetting)
         {
             case Difficulty.Medium:
+                ScoreToBeat = (int)(ScoreToBeat * 1.2);
                 medium.SetActive(true);
                 FinishAt = DateTime.Now.AddSeconds(75);
                 break;
             case Difficulty.Hard:
+                ScoreToBeat = (int)(ScoreToBeat * 1.5);
                 hard.SetActive(true);
                 FinishAt = DateTime.Now.AddSeconds(60);
                 break;
@@ -61,8 +89,10 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
         GameObject newObj = Instantiate(Puck);
     }
 	// Update is called once per frame
-	void Update () {
-        double timerValue = (FinishAt - DateTime.Now).TotalSeconds;
+	void Update ()
+    {
+        GameObject.Find("TargetNumber").GetComponent<Text>().text = ScoreToBeat.ToString();
+        double timerValue = (FinishAt - DateTime.Now).TotalSeconds - TimerDebugSkip;
         TimerNumber.GetComponent<Text>().text = ((int)timerValue).ToString();
 
         if(timerValue <= 0)
@@ -72,6 +102,15 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     }
     public void FinishShootout()
     {
+        int currentValue = int.Parse(GameObject.Find("ScoreNumber").GetComponent<Text>().text);
+        bool won = currentValue > ScoreToBeat;
+
+        if(won)
+        {
+            StandingsBehaviour.Round NextRound = ((StandingsBehaviour.Round)((int)CurrentRound + 1));
+            PlayerPrefs.SetString("CurrentRound", JsonUtility.ToJson(NextRound));
+        }
+        GameObject.Find("Main Camera").GetComponent<MenuButtonBehaviour>().FinishedShootout(won);
 
     }
     public void IncrementScore(int add)

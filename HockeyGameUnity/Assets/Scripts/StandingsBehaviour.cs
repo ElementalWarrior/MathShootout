@@ -15,11 +15,17 @@ public class StandingsBehaviour : MonoBehaviour {
     GameObject[] QuarterFinalLabels;
     GameObject[] SemiFinalLabels;
     GameObject[] FinalistLabels;
-    GameObject[] QuarterFinalWinners;
 
     public Round CurrentRound;
 	// Use this for initialization
 	void Start () {
+        if (PlayerPrefs.HasKey("CurrentRound"))
+        {
+            CurrentRound = JsonUtility.FromJson<Round>(PlayerPrefs.GetString("CurrentRound"));
+        } else
+        {
+            CurrentRound = Round.QuarterFinal;
+        }
         Transform canvas = GameObject.Find("Canvas").transform.root;
 
         // if we lose a game, we don't progress, but don't regress, so just set all top labels to our username

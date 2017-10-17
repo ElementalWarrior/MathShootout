@@ -1162,6 +1162,7 @@ GameObject:
   - component: {fileID: 765386099}
   - component: {fileID: 765386098}
   - component: {fileID: 765386103}
+  - component: {fileID: 765386104}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1251,6 +1252,19 @@ MonoBehaviour:
   Puck: {fileID: 1638208094004682, guid: 7e509ffb6901a78449299fa7ed82a6ab, type: 2}
   ArrowSprite: {fileID: 0}
   TimerNumber: {fileID: 0}
+  ScoreToBeat: 0
+  TimerDebugSkip: 0
+--- !u!114 &765386104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 765386097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a396f8a3cb597e428d815267a1a74e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &797077455
 GameObject:
   m_ObjectHideFlags: 0

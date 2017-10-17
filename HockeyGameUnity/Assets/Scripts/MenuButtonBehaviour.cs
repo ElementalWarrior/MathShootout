@@ -19,10 +19,16 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void Play()
     {
-        if(String.IsNullOrEmpty(PlayerPrefs.GetString("TeamName")))
+        if(!PlayerPrefs.HasKey("TeamName"))
         {
             SceneManager.LoadScene("TeamName");
-        } else
+        } else if(!PlayerPrefs.HasKey("PrimaryColour"))
+        {
+            SceneManager.LoadScene("TeamColours");
+        } else if(!PlayerPrefs.HasKey("Difficulty"))
+        {
+            SceneManager.LoadScene("Difficulty");
+        } else 
         {
             SceneManager.LoadScene("Standings");
         }
@@ -30,9 +36,21 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void ChooseName()
     {
-        Debug.Log(GameObject.Find("InputField").GetComponent<InputField>().text);
         PlayerPrefs.SetString("TeamName", GameObject.Find("InputField").GetComponent<InputField>().text);
+        SceneManager.LoadScene("TeamColours");
+    }
+
+    public void ChooseColours()
+    {
+        Color[] colours = GameObject.Find("Main Camera").GetComponent<TeamColourBehaviour>().ChosenColours;
+        PlayerPrefs.SetString("PrimaryColour", JsonUtility.ToJson(colours[0]));
+        PlayerPrefs.SetString("SecondaryColour", JsonUtility.ToJson(colours[1]));
         SceneManager.LoadScene("Difficulty");
+    }
+
+    public void PlayNextMatch()
+    {
+        SceneManager.LoadScene("Shootout");
     }
 
     public void Quit()
@@ -47,21 +65,27 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void Easy()
     {
-        ShootoutControllerBehaviour.DifficultySetting = ShootoutControllerBehaviour.Difficulty.Easy;
-        SceneManager.LoadScene("Shootout");
+        LoadShootout(ShootoutControllerBehaviour.Difficulty.Easy);
     }
 
     public void Medium()
     {
-        ShootoutControllerBehaviour.DifficultySetting = ShootoutControllerBehaviour.Difficulty.Medium;
-        SceneManager.LoadScene("Shootout");
+        LoadShootout(ShootoutControllerBehaviour.Difficulty.Medium);
 
     }
 
     public void Hard()
     {
-        ShootoutControllerBehaviour.DifficultySetting = ShootoutControllerBehaviour.Difficulty.Hard;
-        SceneManager.LoadScene("Shootout");
+        LoadShootout(ShootoutControllerBehaviour.Difficulty.Hard);
 
+    }
+    private void LoadShootout(ShootoutControllerBehaviour.Difficulty difficulty)
+    {
+        PlayerPrefs.SetInt("Difficulty", (int)difficulty);
+        SceneManager.LoadScene("Standings");
+    }
+    public void FinishedShootout(bool won)
+    {
+        SceneManager.LoadScene("MatchEnd");
     }
 }
