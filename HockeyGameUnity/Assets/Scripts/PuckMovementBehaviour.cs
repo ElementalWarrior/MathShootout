@@ -48,7 +48,7 @@ public class PuckMovementBehaviour : MonoBehaviour {
         }
         //stop y position if it hits the position of the backboard.
         //and not inside the net
-        if (Mathf.Abs(transform.position.x) < 2.5 && transform.position.y > 1.5)
+        if (transform.position.y > 1.5)
         {
             _restrictYVelocity = true;
         }

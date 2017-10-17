@@ -22,10 +22,10 @@ public class NetBehaviour : MonoBehaviour {
             collider.GetComponent<PuckMovementBehaviour>().Fadeout();
             collider.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             int puckValue = collider.GetComponentInChildren<PuckMathBehaviour>().Number;
-            if (name == "HitboxNetEven" && puckValue % 2 == 0)
+            if (tag == "NetEven" && puckValue % 2 == 0)
             {
                 ShootoutControllerBehaviour.Controller.IncrementScore(5);
-            } else if (name == "HitboxNetOdd" && puckValue % 2 == 1)
+            } else if (tag == "NetOdd" && puckValue % 2 == 1)
             {
                 ShootoutControllerBehaviour.Controller.IncrementScore(5);
             }
