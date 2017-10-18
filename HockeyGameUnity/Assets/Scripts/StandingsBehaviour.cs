@@ -98,6 +98,8 @@ public class StandingsBehaviour : MonoBehaviour {
                 SetLabelVisibility(FinalistLabels, true);
                 SetLabelVisibility(new GameObject[] { canvas.Find("Champion").gameObject }, true);
                 DiscolorLabel(canvas.transform.Find("Finalist2").gameObject);
+
+                GameObject.Find("Continue").SetActive(false);
                 break;
         }
 

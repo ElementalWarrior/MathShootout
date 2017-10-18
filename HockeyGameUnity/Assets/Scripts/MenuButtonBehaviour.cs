@@ -94,4 +94,14 @@ public class MenuButtonBehaviour : MonoBehaviour {
     {
         SceneManager.LoadScene("Standings");
     }
+
+    public void PrizePage()
+    {
+        SceneManager.LoadScene("Prize");
+    }
+
+    public void MenuPage()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }
