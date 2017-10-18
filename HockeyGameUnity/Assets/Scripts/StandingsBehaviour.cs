@@ -35,35 +35,35 @@ public class StandingsBehaviour : MonoBehaviour {
         GameObject.Find("Champion").GetComponent<Text>().text = PlayerPrefs.GetString("TeamName");
 
         //hide user upper bracket labels
-        canvas.FindChild("Winner1").gameObject.SetActive(false);
-        canvas.FindChild("Finalist1").gameObject.SetActive(false);
+        canvas.Find("Winner1").gameObject.SetActive(false);
+        canvas.Find("Finalist1").gameObject.SetActive(false);
 
         QuarterFinalLabels = new GameObject[]
         {
-            canvas.FindChild("Team1").gameObject,
-            canvas.FindChild("Team2").gameObject,
-            canvas.FindChild("Team3").gameObject,
-            canvas.FindChild("Team4").gameObject,
-            canvas.FindChild("Team5").gameObject,
-            canvas.FindChild("Team6").gameObject,
-            canvas.FindChild("Team7").gameObject,
+            canvas.Find("Team1").gameObject,
+            canvas.Find("Team2").gameObject,
+            canvas.Find("Team3").gameObject,
+            canvas.Find("Team4").gameObject,
+            canvas.Find("Team5").gameObject,
+            canvas.Find("Team6").gameObject,
+            canvas.Find("Team7").gameObject,
         };
         SemiFinalLabels = new GameObject[]
         {
-            canvas.FindChild("Winner2").gameObject,
-            canvas.FindChild("Winner3").gameObject,
-            canvas.FindChild("Winner4").gameObject,
+            canvas.Find("Winner2").gameObject,
+            canvas.Find("Winner3").gameObject,
+            canvas.Find("Winner4").gameObject,
         };
         FinalistLabels = new GameObject[]
         {
-            canvas.FindChild("Finalist2").gameObject,
+            canvas.Find("Finalist2").gameObject,
         };
         switch (CurrentRound)
         {
             case Round.QuarterFinal:
                 SetLabelVisibility(SemiFinalLabels, false);
                 SetLabelVisibility(FinalistLabels, false);
-                SetLabelVisibility(new GameObject[] { canvas.FindChild("Champion").gameObject }, false);
+                SetLabelVisibility(new GameObject[] { canvas.Find("Champion").gameObject }, false);
                 break;
             case Round.SemiFinal:
 
@@ -74,10 +74,10 @@ public class StandingsBehaviour : MonoBehaviour {
                 }
 
 
-                canvas.FindChild("Winner1").gameObject.SetActive(true);
+                canvas.Find("Winner1").gameObject.SetActive(true);
                 SetLabelVisibility(SemiFinalLabels, true);
                 SetLabelVisibility(FinalistLabels, false);
-                SetLabelVisibility(new GameObject[] { canvas.FindChild("Champion").gameObject }, false);
+                SetLabelVisibility(new GameObject[] { canvas.Find("Champion").gameObject }, false);
                 break;
             case Round.Finals:
                 if (!PlayerPrefs.HasKey("SemiFinalWinner") || true)
@@ -85,18 +85,18 @@ public class StandingsBehaviour : MonoBehaviour {
                     PlayerPrefs.SetString("SemiFinalWinner", DecideSemiFinalWinner());
                 }
 
-                canvas.FindChild("Winner1").gameObject.SetActive(true);
-                canvas.FindChild("Finalist1").gameObject.SetActive(true);
+                canvas.Find("Winner1").gameObject.SetActive(true);
+                canvas.Find("Finalist1").gameObject.SetActive(true);
                 SetLabelVisibility(SemiFinalLabels, true);
                 SetLabelVisibility(FinalistLabels, true);
-                SetLabelVisibility(new GameObject[] { canvas.FindChild("Champion").gameObject }, false);
+                SetLabelVisibility(new GameObject[] { canvas.Find("Champion").gameObject }, false);
                 break;
             case Round.Finished:
-                canvas.FindChild("Winner1").gameObject.SetActive(true);
-                canvas.FindChild("Finalist1").gameObject.SetActive(true);
+                canvas.Find("Winner1").gameObject.SetActive(true);
+                canvas.Find("Finalist1").gameObject.SetActive(true);
                 SetLabelVisibility(SemiFinalLabels, true);
                 SetLabelVisibility(FinalistLabels, true);
-                SetLabelVisibility(new GameObject[] { canvas.FindChild("Champion").gameObject }, true);
+                SetLabelVisibility(new GameObject[] { canvas.Find("Champion").gameObject }, true);
                 DiscolorLabel(canvas.transform.Find("Finalist2").gameObject);
                 break;
         }
