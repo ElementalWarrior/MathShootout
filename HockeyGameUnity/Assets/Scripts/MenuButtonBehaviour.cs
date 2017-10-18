@@ -86,6 +86,12 @@ public class MenuButtonBehaviour : MonoBehaviour {
     }
     public void FinishedShootout(bool won)
     {
+        MatchEndBehaviour.WonMatch = won;
         SceneManager.LoadScene("MatchEnd");
+    }
+
+    public void BackToStandings()
+    {
+        SceneManager.LoadScene("Standings");
     }
 }

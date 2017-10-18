@@ -27,7 +27,13 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-
+        if(PlayerPrefs.HasKey("Difficulty"))
+        {
+            DifficultySetting = (Difficulty)PlayerPrefs.GetInt("Difficulty");
+        } else
+        {
+            DifficultySetting = Difficulty.Easy;
+        }
         if (!PlayerPrefs.HasKey("CurrentRound"))
         {
             CurrentRound = StandingsBehaviour.Round.QuarterFinal;
