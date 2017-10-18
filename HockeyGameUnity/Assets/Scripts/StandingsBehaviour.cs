@@ -102,6 +102,10 @@ public class StandingsBehaviour : MonoBehaviour {
                 GameObject.Find("Continue").SetActive(false);
                 break;
         }
+        if(CurrentRound != Round.Finished)
+        {
+            GameObject.Find("Prize").SetActive(false);
+        }
 
         if (PlayerPrefs.HasKey("QuarterFinalWinners"))
         {

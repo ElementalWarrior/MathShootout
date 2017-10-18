@@ -95,6 +95,12 @@ public class MenuButtonBehaviour : MonoBehaviour {
         SceneManager.LoadScene("Standings");
     }
 
+    public void MenuPageAndRefreshPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        MenuPage();
+    }
+
     public void PrizePage()
     {
         SceneManager.LoadScene("Prize");
