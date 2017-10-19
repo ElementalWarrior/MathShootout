@@ -13,6 +13,7 @@ public class IntroScript : MonoBehaviour {
 
 	void Start () {
 		cutscenes = Resources.LoadAll<Sprite> ("Intro");
+		current_image.sprite = GetComponent<SpriteRenderer> ().sprite;
 	}
 
 	public void NextButton() {
