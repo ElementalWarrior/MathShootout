@@ -104,7 +104,7 @@ public class StandingsBehaviour : MonoBehaviour {
         }
         if(CurrentRound != Round.Finished)
         {
-            GameObject.Find("Prize").SetActive(false);
+            GameObject.Find("ButtonChampion").SetActive(false);
         }
 
         if (PlayerPrefs.HasKey("QuarterFinalWinners"))

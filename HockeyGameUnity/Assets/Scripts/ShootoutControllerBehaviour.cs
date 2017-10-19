@@ -27,6 +27,7 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        GameObject.Destroy(GameObject.Find("menu_music"));
         if(PlayerPrefs.HasKey("Difficulty"))
         {
             DifficultySetting = (Difficulty)PlayerPrefs.GetInt("Difficulty");
