@@ -5,9 +5,15 @@ using UnityEngine;
 
 public class PuckDragBehaviour : MonoBehaviour {
 
+	public AudioSource audio;
+	public AudioClip shoot;
+
     // Use this for initialization
 	void Start () {
         transform.position = new Vector3(0, -4.09f);
+
+		shoot = Resources.Load<AudioClip> ("Shootout/shoot");
+		audio = gameObject.AddComponent<AudioSource> ();
 	}
     private bool _dragging = false;
 	// Update is called once per frame
@@ -27,6 +33,8 @@ public class PuckDragBehaviour : MonoBehaviour {
         } else if(_dragging && Input.GetMouseButtonUp(0)) //fired puck
         {
             _dragging = false;
+
+			audio.PlayOneShot (shoot);
 
             Vector2 direction = mousePoint - (Vector2)transform.position;
             direction.Normalize();
