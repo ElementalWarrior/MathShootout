@@ -92,6 +92,10 @@ public class MenuButtonBehaviour : MonoBehaviour {
     {
         MatchEndBehaviour.WonMatch = won;
         SceneManager.LoadScene("MatchEnd");
+
+		if (won) {
+			audio.PlayOneShot (applause);
+		}
     }
 
     public void BackToStandings()
