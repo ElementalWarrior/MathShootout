@@ -7,9 +7,13 @@ using UnityEngine.UI;
 
 public class MenuButtonBehaviour : MonoBehaviour {
 
+	public AudioSource audio;
+	public AudioClip applause;
+
 	// Use this for initialization
 	void Start () {
-		
+		applause = Resources.Load<AudioClip> ("Prize/applause");
+		audio = gameObject.AddComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -104,6 +108,7 @@ public class MenuButtonBehaviour : MonoBehaviour {
     public void PrizePage()
     {
         SceneManager.LoadScene("Prize");
+		audio.PlayOneShot (applause);
     }
 
     public void MenuPage()
