@@ -52,7 +52,7 @@ public class IntroScript : MonoBehaviour {
 
 		/* If intro is finished, load game */
 		if (cutscenes.Length == (loc + 1)) {
-			SceneManager.LoadScene ("Shootout");
+			SceneManager.LoadScene ("Standings");
 		}
 	}
 

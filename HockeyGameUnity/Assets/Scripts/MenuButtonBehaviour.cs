@@ -52,6 +52,11 @@ public class MenuButtonBehaviour : MonoBehaviour {
         SceneManager.LoadScene("Difficulty");
     }
 
+    public void Intro()
+    {
+        SceneManager.LoadScene("Intro");
+    }
+
     public void PlayNextMatch()
     {
         SceneManager.LoadScene("Shootout");
@@ -69,24 +74,24 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void Easy()
     {
-        LoadShootout(ShootoutControllerBehaviour.Difficulty.Easy);
+        HandleDifficulty(ShootoutControllerBehaviour.Difficulty.Easy, "Intro");
     }
 
     public void Medium()
     {
-        LoadShootout(ShootoutControllerBehaviour.Difficulty.Medium);
+        HandleDifficulty(ShootoutControllerBehaviour.Difficulty.Medium, "Intro");
 
     }
 
     public void Hard()
     {
-        LoadShootout(ShootoutControllerBehaviour.Difficulty.Hard);
+        HandleDifficulty(ShootoutControllerBehaviour.Difficulty.Hard, "Intro");
 
     }
-    private void LoadShootout(ShootoutControllerBehaviour.Difficulty difficulty)
+    private void HandleDifficulty(ShootoutControllerBehaviour.Difficulty difficulty, string scene)
     {
         PlayerPrefs.SetInt("Difficulty", (int)difficulty);
-        SceneManager.LoadScene("Standings");
+        SceneManager.LoadScene(scene);
     }
     public void FinishedShootout(bool won)
     {
