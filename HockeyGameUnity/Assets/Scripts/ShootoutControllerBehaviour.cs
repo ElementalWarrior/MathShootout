@@ -46,14 +46,14 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
 
         if(CurrentRound == StandingsBehaviour.Round.QuarterFinal)
         {
-            ScoreToBeat = 225;
+            ScoreToBeat = 50;
         } else if(CurrentRound == StandingsBehaviour.Round.SemiFinal)
         {
-            ScoreToBeat = 250;
+            ScoreToBeat = 70;
         }
         else if (CurrentRound == StandingsBehaviour.Round.Finals)
         {
-            ScoreToBeat = 275;
+            ScoreToBeat = 120;
         }
 
         Controller = this;
@@ -71,12 +71,12 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
         switch (DifficultySetting)
         {
             case Difficulty.Medium:
-                ScoreToBeat = (int)(ScoreToBeat * 1.2);
+                ScoreToBeat = (int)(ScoreToBeat * 1.5);
                 medium.SetActive(true);
                 FinishAt = DateTime.Now.AddSeconds(75);
                 break;
             case Difficulty.Hard:
-                ScoreToBeat = (int)(ScoreToBeat * 1.5);
+                ScoreToBeat = (int)(ScoreToBeat * 2);
                 hard.SetActive(true);
                 FinishAt = DateTime.Now.AddSeconds(60);
                 break;
