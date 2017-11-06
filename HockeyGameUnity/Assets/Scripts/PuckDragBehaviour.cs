@@ -10,7 +10,7 @@ public class PuckDragBehaviour : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-        transform.position = new Vector3(0, -4.09f);
+        transform.position = new Vector3(0, -3.39f);
 
 		shoot = Resources.Load<AudioClip> ("Shootout/shoot");
 		audio = gameObject.AddComponent<AudioSource> ();

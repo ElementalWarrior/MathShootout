@@ -64,6 +64,7 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
     public void Quit()
     {
+		PlayerPrefs.DeleteAll();
         Application.Quit();
     }
 
@@ -118,6 +119,7 @@ public class MenuButtonBehaviour : MonoBehaviour {
     {
         SceneManager.LoadScene("Prize");
 		audio.PlayOneShot (applause);
+		PlayerPrefs.DeleteAll();
     }
 
     public void MenuPage()

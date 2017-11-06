@@ -19,8 +19,11 @@ public class StandingsBehaviour : MonoBehaviour {
     public Round CurrentRound;
 	// Use this for initialization
 	void Start () {
+		CurrentRound = Round.QuarterFinal;
+
         if (PlayerPrefs.HasKey("CurrentRound"))
         {
+			Debug.Log (JsonUtility.FromJson<Round> (PlayerPrefs.GetString ("CurrentRound")));
             CurrentRound = JsonUtility.FromJson<Round>(PlayerPrefs.GetString("CurrentRound"));
         } else
         {
