@@ -14,6 +14,14 @@ public class MenuButtonBehaviour : MonoBehaviour {
 	void Start () {
 		applause = Resources.Load<AudioClip> ("Prize/applause");
 		audio = gameObject.AddComponent<AudioSource> ();
+        if (!PlayerPrefs.HasKey("session_id"))
+        {
+            PlayerPrefs.SetString("session_id", Guid.NewGuid().ToString());
+        }
+        if (!PlayerPrefs.HasKey("session_start"))
+        {
+            PlayerPrefs.SetString("session_start", DateTime.Now.ToString());
+        }
 	}
 	
 	// Update is called once per frame

@@ -16,6 +16,7 @@ public class NetBehaviour : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        bool correctNet = false;
         GameObject collider = collision.gameObject;
         if(collision.gameObject.tag == "Puck")
         {
@@ -27,6 +28,7 @@ public class NetBehaviour : MonoBehaviour {
                 if(puckValue % 2 == 0)
                 {
                     ShootoutControllerBehaviour.Controller.IncrementScore(5);
+                    correctNet = true;
                 } else
                 {
                     ShootoutControllerBehaviour.Controller.IncrementScore(-2);
@@ -36,11 +38,13 @@ public class NetBehaviour : MonoBehaviour {
                 if (puckValue % 2 == 1)
                 {
                     ShootoutControllerBehaviour.Controller.IncrementScore(5);
+                    correctNet = true;
                 } else
                 {
                     ShootoutControllerBehaviour.Controller.IncrementScore(-2);
                 }
             }
         }
+        Log.Submit("NetCollision", correctNet);
     }
 }
