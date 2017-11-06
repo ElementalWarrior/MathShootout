@@ -66,7 +66,9 @@ public class Log {
     {
         string sessionID = PlayerPrefs.GetString("session_id");
         string player_name = PlayerPrefs.GetString("TeamName", null);
-        DateTime date_session_start = DateTime.Parse(PlayerPrefs.GetString("session_start")); 
+        DateTime? date_session_start = null;
+        DateTime date;
+        date_session_start = DateTime.TryParse(PlayerPrefs.GetString("session_start", null), out date) ? date : (DateTime?)null;
         string postData = JsonUtility.ToJson( new PostData {
 
             session_id = sessionID
