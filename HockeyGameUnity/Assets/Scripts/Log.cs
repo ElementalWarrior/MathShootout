@@ -78,7 +78,7 @@ public class Log {
             date_created_public = DateTime.Now
         });
         Debug.Log("Logging: " + tag + ", " + postData);
-        UnityWebRequest wr = UnityWebRequest.Put("localhost:8080/submit", postData);
+        UnityWebRequest wr = UnityWebRequest.Put("https://mathshootout-demo.herokuapp.com/submit", postData);
         wr.method = "POST";
         wr.SetRequestHeader("Content-Type", "application/json");
         wr.Send();
