@@ -12,6 +12,7 @@ public class MenuButtonBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        Log.Submit("SceneStarted", SceneManager.GetActiveScene().name);
 		applause = Resources.Load<AudioClip> ("Prize/applause");
 		audio = gameObject.AddComponent<AudioSource> ();
         if (!PlayerPrefs.HasKey("session_id"))
@@ -23,10 +24,23 @@ public class MenuButtonBehaviour : MonoBehaviour {
             PlayerPrefs.SetString("session_start", DateTime.Now.ToString());
         }
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+    private void OnDestroy()
+    {
+        Log.Submit("SceneEnded", SceneManager.GetActiveScene().name);
+    }
+    static DateTime? lastHeartbeatLog = null;
+    IEnumerator Heartbeat()
+    {
+        if(lastHeartbeatLog == null || (DateTime.Now - lastHeartbeatLog.Value).TotalSeconds > 30)
+        {
+            lastHeartbeatLog = DateTime.Now;
+            Log.Submit("Heartbeat", "");
+        }
+        yield return null;
+    }
+    // Update is called once per frame
+    void Update () {
+        StartCoroutine(Heartbeat());
 	}
 
     public void Play()

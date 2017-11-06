@@ -44,6 +44,7 @@ public class PuckMovementBehaviour : MonoBehaviour {
         //dirty way to remove puck after faded out.
         if (GetComponent<SpriteRenderer>().color.a < 0.001)
         {
+            Log.Submit("PuckMiss", "");
             GameObject.Destroy(gameObject);
         }
         //stop y position if it hits the position of the backboard.

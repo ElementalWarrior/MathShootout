@@ -68,24 +68,28 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
         easy.SetActive(false);
         medium.SetActive(false);
         hard.SetActive(false);
+        int duration;
         switch (DifficultySetting)
         {
             case Difficulty.Medium:
+                duration = 75;
                 ScoreToBeat = (int)(ScoreToBeat * 1.5);
                 medium.SetActive(true);
-                FinishAt = DateTime.Now.AddSeconds(75);
                 break;
             case Difficulty.Hard:
+                duration = 60;
                 ScoreToBeat = (int)(ScoreToBeat * 2);
                 hard.SetActive(true);
-                FinishAt = DateTime.Now.AddSeconds(60);
                 break;
             default:
             case Difficulty.Easy:
+                duration = 90;
                 easy.SetActive(true);
-                FinishAt = DateTime.Now.AddSeconds(90);
                 break;
         }
+        FinishAt = DateTime.Now.AddSeconds(duration);
+        Log.Submit("ShootoutDuration", duration);
+        Log.Submit("ShootoutScoreToBeat", ScoreToBeat);
 
         StartedAt = DateTime.Now;
         TimerNumber = GameObject.Find("TimerNumber");
@@ -117,6 +121,8 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
             StandingsBehaviour.Round NextRound = ((StandingsBehaviour.Round)((int)CurrentRound + 1));
             PlayerPrefs.SetString("CurrentRound", JsonUtility.ToJson(NextRound));
         }
+        Log.Submit("ShootoutOutcome", won ? "Won" : "Lost");
+        Log.Submit("ShootoutScore", currentValue);
         GameObject.Find("Main Camera").GetComponent<MenuButtonBehaviour>().FinishedShootout(won);
 
     }
