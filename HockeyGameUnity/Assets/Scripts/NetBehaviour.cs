@@ -20,7 +20,7 @@ public class NetBehaviour : MonoBehaviour {
         GameObject collider = collision.gameObject;
         if(collision.gameObject.tag == "Puck")
         {
-            collider.GetComponent<PuckMovementBehaviour>().Fadeout();
+            collider.GetComponent<PuckMovementBehaviour>().Fadeout(false);
             collider.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             int puckValue = collider.GetComponentInChildren<PuckMathBehaviour>().Number;
             if (tag == "NetEven" )

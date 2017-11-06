@@ -6,12 +6,14 @@ using System;
 public class PuckMovementBehaviour : MonoBehaviour {
     DateTime? timeFadeStart = null;
     Boolean _restrictYVelocity = false;
+    bool _isMiss = true;
 	// Use this for initialization
 	void Start () {
 	}
 
-    public void Fadeout()
+    public void Fadeout(bool isMiss = true)
     {
+        _isMiss = isMiss;
         timeFadeStart = DateTime.Now;
     }
 
@@ -44,7 +46,10 @@ public class PuckMovementBehaviour : MonoBehaviour {
         //dirty way to remove puck after faded out.
         if (GetComponent<SpriteRenderer>().color.a < 0.001)
         {
-            Log.Submit("PuckMiss", "");
+            if (_isMiss)
+            {
+                Log.Submit("PuckMiss", "");
+            }
             GameObject.Destroy(gameObject);
         }
         //stop y position if it hits the position of the backboard.
