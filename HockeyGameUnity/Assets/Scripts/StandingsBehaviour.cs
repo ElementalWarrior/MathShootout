@@ -17,6 +17,38 @@ public class StandingsBehaviour : MonoBehaviour {
     GameObject[] FinalistLabels;
 
     public Round CurrentRound;
+
+	public bool location_on;
+
+	public string[] animals = new string[26] {
+		"Alligators",
+		"Bears",
+		"Cougars",
+		"Dolphins",
+		"Elephants",
+		"Frogs",
+		"Grasshoppers",
+		"Hippos",
+		"Iguanas",
+		"Jaguars",
+		"Kangaroos",
+		"Llamas",
+		"Monkeys",
+		"Nighthawks",
+		"Otters",
+		"Penguins",
+		"Quail",
+		"Roadrunners",
+		"Squirrels",
+		"Tigers",
+		"Unicorns",
+		"Vipers",
+		"Wolverines",
+		"Xenons",
+		"Yellowjackets",
+		"Zebras"
+	};
+
 	// Use this for initialization
 	void Start () {
 		CurrentRound = Round.QuarterFinal;
@@ -127,7 +159,33 @@ public class StandingsBehaviour : MonoBehaviour {
             DiscolourNonWinners(SemiFinalLabels, new string[] { semiFinalWinner });
         }
 
+		/* User does not have location services on */
+		if (!Input.location.isEnabledByUser) {
+			location_on = false;
+			return;
+		}
 
+		/* User does have location service on */
+		Input.location.Start;
+
+		int start_time = 0;
+
+		/* Wait up to 10 seconds for location services to initialize */
+		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 10)) {
+			yield return new WaitForSeconds(1);
+			start_time++;
+		}
+
+		/* Initialization failed or timed-out */
+		if (Input.location.status != LocationServiceStatus.Running) {
+			location_on = false;
+			return;
+		} 
+
+		/* Location service initialization was successful */
+		else {
+			location_on = true;
+		}
     }
 
     string SerializeStringArray(string[] values)
@@ -145,15 +203,20 @@ public class StandingsBehaviour : MonoBehaviour {
     }
     string[] DecideQuarterFinalWinners()
     {
-        string[] teams = new string[]
-        {
-            "East Coast Eagles",
-            "Northern Owls",
-            "Southern Snakes",
-            "Midwest Minstrels",
-            "Cape Camels",
-            "Gulf Gophers"
-        };
+		string[] teams = new string[6];
+        
+		/* If location services are off, use default teams */
+		if (!location_on) {
+			{
+				teams [0] = "East Coast Eagles";
+				teams [1] = "Northern Owls";
+				teams [2] = "Southern Snakes";
+				teams [3] = "Midwest Minstrels";
+				teams [4] = "Cape Camels";
+				teams [5] = "Gulf Gophers";
+			}
+		}
+
         string winner2 = teams[Random.Range(0, 1+1)];
         string winner3 = teams[Random.Range(2, 3+1)];
         string winner4 = teams[Random.Range(4, 5+1)];
