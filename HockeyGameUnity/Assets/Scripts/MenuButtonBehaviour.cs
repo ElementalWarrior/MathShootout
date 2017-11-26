@@ -11,7 +11,7 @@ public class MenuButtonBehaviour : MonoBehaviour {
 	public AudioClip applause;
 
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
         Log.Submit("SceneStarted", SceneManager.GetActiveScene().name);
 		applause = Resources.Load<AudioClip> ("Prize/applause");
 		audio = gameObject.AddComponent<AudioSource> ();
@@ -23,6 +23,23 @@ public class MenuButtonBehaviour : MonoBehaviour {
         {
             PlayerPrefs.SetString("session_start", DateTime.Now.ToString());
         }
+
+		/* User does not have location services on */
+		if (!Input.location.isEnabledByUser) {
+			//			location_on = false;
+			//			yield break;
+		}
+
+		/* User does have location service on */
+		Input.location.Start();
+
+		int start_time = 0;
+
+		/* Wait up to 20 seconds for location services to initialize */
+		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 20)) {
+			yield return new WaitForSeconds(1);
+			start_time++;
+		}
 	}
     private void OnDestroy()
     {

@@ -50,7 +50,7 @@ public class StandingsBehaviour : MonoBehaviour {
 	};
 
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
 		CurrentRound = Round.QuarterFinal;
 
         if (PlayerPrefs.HasKey("CurrentRound"))
@@ -73,16 +73,67 @@ public class StandingsBehaviour : MonoBehaviour {
         canvas.Find("Winner1").gameObject.SetActive(false);
         canvas.Find("Finalist1").gameObject.SetActive(false);
 
-        QuarterFinalLabels = new GameObject[]
-        {
-            canvas.Find("Team1").gameObject,
-            canvas.Find("Team2").gameObject,
-            canvas.Find("Team3").gameObject,
-            canvas.Find("Team4").gameObject,
-            canvas.Find("Team5").gameObject,
-            canvas.Find("Team6").gameObject,
-            canvas.Find("Team7").gameObject,
-        };
+		QuarterFinalLabels = new GameObject[7];
+
+		/* User does have location service on */
+		location_on = true;
+		Input.location.Start();
+
+		int start_time = 0;
+
+		/* Wait up to 20 seconds for location services to initialize */
+		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 20)) {
+			yield return new WaitForSeconds(1);
+			start_time++;
+		}
+
+		if (Input.location.status != LocationServiceStatus.Running) {
+			location_on = false;
+		}
+
+		/* Location services are not enabled */
+		if (!location_on) {
+			QuarterFinalLabels [0] = canvas.Find ("Team1").gameObject;
+			QuarterFinalLabels [1] = canvas.Find ("Team2").gameObject;
+			QuarterFinalLabels [2] = canvas.Find ("Team3").gameObject;
+			QuarterFinalLabels [3] = canvas.Find ("Team4").gameObject;
+			QuarterFinalLabels [4] = canvas.Find ("Team5").gameObject;
+			QuarterFinalLabels [5] = canvas.Find ("Team6").gameObject;
+			QuarterFinalLabels [6] = canvas.Find ("Team7").gameObject;
+		} 
+
+		/* Location services enabled */
+		else {
+			PlayerLocation.Locations.locate (location_on, 0, 0);
+			string curr_city = PlayerLocation.Locations.city;
+			GameObject label = QuarterFinalLabels[0];
+			label.GetComponent<Text>().text = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
+
+			string other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, 10, 10, false, true);
+			label = QuarterFinalLabels[1];
+			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 10, 10, true, true);
+			label = QuarterFinalLabels[2];
+			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 0, 10, true, false);
+			label = QuarterFinalLabels[3];
+			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, -10, -10, false, true);
+			label = QuarterFinalLabels[4];
+			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, 0, -10, true, false);
+			label = QuarterFinalLabels[5];
+			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, -10, -10, true, true);
+			label = QuarterFinalLabels[6];
+			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+		}
+
         SemiFinalLabels = new GameObject[]
         {
             canvas.Find("Winner2").gameObject,
@@ -161,17 +212,17 @@ public class StandingsBehaviour : MonoBehaviour {
 
 		/* User does not have location services on */
 		if (!Input.location.isEnabledByUser) {
-			location_on = false;
-			return;
+//			location_on = false;
+//			yield break;
 		}
 
 		/* User does have location service on */
-		Input.location.Start;
+		Input.location.Start();
 
-		int start_time = 0;
+		start_time = 0;
 
-		/* Wait up to 10 seconds for location services to initialize */
-		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 10)) {
+		/* Wait up to 20 seconds for location services to initialize */
+		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 20)) {
 			yield return new WaitForSeconds(1);
 			start_time++;
 		}
@@ -179,7 +230,7 @@ public class StandingsBehaviour : MonoBehaviour {
 		/* Initialization failed or timed-out */
 		if (Input.location.status != LocationServiceStatus.Running) {
 			location_on = false;
-			return;
+			yield break;
 		} 
 
 		/* Location service initialization was successful */
@@ -207,14 +258,37 @@ public class StandingsBehaviour : MonoBehaviour {
         
 		/* If location services are off, use default teams */
 		if (!location_on) {
-			{
-				teams [0] = "East Coast Eagles";
-				teams [1] = "Northern Owls";
-				teams [2] = "Southern Snakes";
-				teams [3] = "Midwest Minstrels";
-				teams [4] = "Cape Camels";
-				teams [5] = "Gulf Gophers";
-			}
+			teams [0] = "East Coast Eagles";
+			teams [1] = "Northern Owls";
+			teams [2] = "Southern Snakes";
+			teams [3] = "Midwest Minstrels";
+			teams [4] = "Cape Camels";
+			teams [5] = "Gulf Gophers";
+		}
+
+		/* Else player has location services on */
+		else {
+			PlayerLocation.Locations.locate (location_on, 0, 0);
+			string curr_city = PlayerLocation.Locations.city;
+			teams [0] = curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65];
+
+			string other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, 10, 10, false, true);
+			teams [1] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+		
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 10, 10, true, true);
+			teams [2] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 0, 10, true, false);
+			teams [3] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, -10, -10, false, true);
+			teams [4] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, 0, -10, true, false);
+			teams [5] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+
+			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, -10, -10, true, true);
+			teams [6] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
 		}
 
         string winner2 = teams[Random.Range(0, 1+1)];
