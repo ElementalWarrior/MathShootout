@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,12 +14,11 @@ public class StandingsBehaviour : MonoBehaviour {
         Finished
     }
     GameObject[] QuarterFinalLabels;
+	string[] QuarterFinalTeams;
     GameObject[] SemiFinalLabels;
     GameObject[] FinalistLabels;
 
     public Round CurrentRound;
-
-	public bool location_on;
 
 	public string[] animals = new string[26] {
 		"Alligators",
@@ -50,7 +50,7 @@ public class StandingsBehaviour : MonoBehaviour {
 	};
 
 	// Use this for initialization
-	IEnumerator Start () {
+	void Start () {
 		CurrentRound = Round.QuarterFinal;
 
         if (PlayerPrefs.HasKey("CurrentRound"))
@@ -73,66 +73,198 @@ public class StandingsBehaviour : MonoBehaviour {
         canvas.Find("Winner1").gameObject.SetActive(false);
         canvas.Find("Finalist1").gameObject.SetActive(false);
 
-		QuarterFinalLabels = new GameObject[7];
-
-		/* User does have location service on */
-		location_on = true;
-		Input.location.Start();
-
-		int start_time = 0;
-
-		/* Wait up to 20 seconds for location services to initialize */
-		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 20)) {
-			yield return new WaitForSeconds(1);
-			start_time++;
-		}
-
-		if (Input.location.status != LocationServiceStatus.Running) {
-			location_on = false;
-		}
-
-		/* Location services are not enabled */
-		if (!location_on) {
-			QuarterFinalLabels [0] = canvas.Find ("Team1").gameObject;
-			QuarterFinalLabels [1] = canvas.Find ("Team2").gameObject;
-			QuarterFinalLabels [2] = canvas.Find ("Team3").gameObject;
-			QuarterFinalLabels [3] = canvas.Find ("Team4").gameObject;
-			QuarterFinalLabels [4] = canvas.Find ("Team5").gameObject;
-			QuarterFinalLabels [5] = canvas.Find ("Team6").gameObject;
-			QuarterFinalLabels [6] = canvas.Find ("Team7").gameObject;
-		} 
-
 		/* Location services enabled */
-		else {
-			PlayerLocation.Locations.locate (location_on, 0, 0);
-			string curr_city = PlayerLocation.Locations.city;
-			GameObject label = QuarterFinalLabels[0];
-			label.GetComponent<Text>().text = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
+		if (Input.location.status == LocationServiceStatus.Running) {
 
-			string other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, 10, 10, false, true);
-			label = QuarterFinalLabels[1];
-			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			float latitude = Input.location.lastData.latitude;
+			float longitude = Input.location.lastData.longitude;
 
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 10, 10, true, true);
-			label = QuarterFinalLabels[2];
-			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			string[] c0 = new string[] {
+				latitude.ToString(),
+				longitude.ToString()
+			};
 
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 0, 10, true, false);
-			label = QuarterFinalLabels[3];
-			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			/* Open cities database */
 
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, -10, -10, false, true);
-			label = QuarterFinalLabels[4];
-			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			QuarterFinalTeams = new string[7];
 
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, 0, -10, true, false);
-			label = QuarterFinalLabels[5];
-			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			GameObject.Find ("Team1").GetComponent<Text>().text = "IM IN HERE";
 
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, -10, -10, true, true);
-			label = QuarterFinalLabels[6];
-			label.GetComponent<Text>().text = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			string[] c1;
+			string[] c2;
+			string[] c3;
+			string[] c4;
+			string[] c5;
+			string[] c6;
+
+			string[] cities = new string[7];
+
+			int count = 0;
+			int loop = 0;
+			int multiplier = -9;
+
+			string line;
+
+			while (count < 7) {
+
+				multiplier = multiplier + 10;
+
+				c1 = newCoordinates (latitude, longitude, 0, multiplier * 30);
+				c2 = newCoordinates (latitude, longitude, multiplier * 30, 0);
+				c3 = newCoordinates (latitude, longitude, multiplier * 30, multiplier * 30);
+				c4 = newCoordinates (latitude, longitude, 0, multiplier * -30);
+				c5 = newCoordinates (latitude, longitude, multiplier * -30, 0);
+				c6 = newCoordinates (latitude, longitude, multiplier * -30, multiplier * -30);
+
+				while ((loop < 5520) && (count < 7)) {
+					line = PlayerLocation.Locations.locations [loop];
+					if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c0 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c0 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c1 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c1 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c2 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c2 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c3 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c3 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c4 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c4 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c5 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c5 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c6 [0]) 
+						|| line.Substring(line.LastIndexOf(",")).Contains (c6 [1])) {
+						cities [count] = line.Substring (0, line.IndexOf (","));
+						count++;
+					}
+
+					loop++;
+				}
+			}
+
+			QuarterFinalTeams [0] = (cities[0] + " " + animals [char.ToUpper ((cities[0]) [0]) - 65]);
+			GameObject.Find ("Team1").GetComponent<Text>().text = QuarterFinalTeams[0];
+
+			QuarterFinalTeams [1] = (cities[1] + " " + animals [char.ToUpper ((cities[1]) [0]) - 65]);
+			GameObject.Find ("Team2").GetComponent<Text>().text = QuarterFinalTeams[1];
+
+			QuarterFinalTeams [2] = (cities[2] + " " + animals [char.ToUpper ((cities[2]) [0]) - 65]);
+			GameObject.Find ("Team3").GetComponent<Text>().text = QuarterFinalTeams[2];
+
+			QuarterFinalTeams [3] = (cities[3] + " " + animals [char.ToUpper ((cities[3]) [0]) - 65]);
+			GameObject.Find ("Team4").GetComponent<Text>().text = QuarterFinalTeams[3];
+
+			QuarterFinalTeams [4] = (cities[4] + " " + animals [char.ToUpper ((cities[4]) [0]) - 65]);
+			GameObject.Find ("Team5").GetComponent<Text>().text = QuarterFinalTeams[4];
+
+			QuarterFinalTeams [5] = (cities[5] + " " + animals [char.ToUpper ((cities[5]) [0]) - 65]);
+			GameObject.Find ("Team6").GetComponent<Text>().text = QuarterFinalTeams[5];
+
+			QuarterFinalTeams [6] = (cities[6] + " " + animals [char.ToUpper ((cities[6]) [0]) - 65]);
+			GameObject.Find ("Team7").GetComponent<Text>().text = QuarterFinalTeams[6];
+
+//			PlayerLocation.Locations.locate (0, 0);
+//			string curr_city = PlayerLocation.Locations.city;
+//			QuarterFinalTeams [0] = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
+//
+//			GameObject.Find ("Team1").GetComponent<Text>().text = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
+
+//			Transform team1 = canvas.Find ("Team1");
+//			Text setTeam1 = team1.GetComponent<Text> ();
+//			setTeam1.text = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
+
+//			string other_city1 = PlayerLocation.Locations.surrounding (curr_city, 0, 10, 10, false, true);
+//			QuarterFinalTeams [1] = (other_city1 + " " + animals [char.ToUpper (other_city1 [0]) - 65]);
+
+//			Transform team2 = canvas.Find ("Team2");
+//			Text setTeam2 = team2.GetComponent<Text> ();
+//			setTeam2.text = (other_city1 + " " + animals [char.ToUpper (other_city1 [0]) - 65]);
+
+//			GameObject.Find ("Team2").GetComponent<Text> ().text = (other_city1 + " " + animals [char.ToUpper (other_city1 [0]) - 65]);
+//
+//			string other_city2 = PlayerLocation.Locations.surrounding (curr_city, 10, 10, 10, true, true);
+//			if (other_city2.Equals (other_city1)) {
+//				other_city2 = PlayerLocation.Locations.surrounding (curr_city, 100, 100, 100, true, true);
+//			}
+//			QuarterFinalTeams [2] = (other_city2 + " " + animals [char.ToUpper (other_city2 [0]) - 65]);
+//
+//			GameObject.Find ("Team3").GetComponent<Text> ().text = (other_city2 + " " + animals [char.ToUpper (other_city2 [0]) - 65]);
+
+//			Transform team3 = canvas.Find ("Team3");
+//			Text setTeam3 = team3.GetComponent<Text> ();
+//			setTeam3.text = (other_city2 + " " + animals [char.ToUpper (other_city2 [0]) - 65]);
+
+//			string other_city3 = PlayerLocation.Locations.surrounding (curr_city, 10, 0, 10, true, false);
+//			if (other_city3.Equals (other_city1) || other_city3.Equals(other_city2)) {
+//				other_city3 = PlayerLocation.Locations.surrounding (curr_city, 100, 0, 100, true, false);
+//			}
+//			QuarterFinalTeams [3] = (other_city3 + " " + animals [char.ToUpper (other_city3 [0]) - 65]);
+//
+//			GameObject.Find ("Team4").GetComponent<Text> ().text = (other_city3 + " " + animals [char.ToUpper (other_city3 [0]) - 65]);
+
+//			Transform team4 = canvas.Find ("Team4");
+//			Text setTeam4 = team4.GetComponent<Text> ();
+//			setTeam4.text = (other_city3 + " " + animals [char.ToUpper (other_city3 [0]) - 65]);
+
+//			string other_city4 = PlayerLocation.Locations.surrounding (curr_city, 0, -10, -10, false, true);
+//			if (other_city4.Equals (other_city1) || other_city4.Equals(other_city2) || other_city4.Equals(other_city3)) {
+//				other_city4 = PlayerLocation.Locations.surrounding (curr_city, 0, -100, -100, false, true);
+//			}
+//			QuarterFinalTeams [4] = (other_city4 + " " + animals [char.ToUpper (other_city4 [0]) - 65]);
+//
+//			GameObject.Find ("Team5").GetComponent<Text> ().text = (other_city4 + " " + animals [char.ToUpper (other_city4 [0]) - 65]);
+
+//			Transform team5 = canvas.Find ("Team5");
+//			Text setTeam5 = team5.GetComponent<Text> ();
+//			setTeam5.text = (other_city4 + " " + animals [char.ToUpper (other_city4 [0]) - 65]);
+
+//			string other_city5 = PlayerLocation.Locations.surrounding (curr_city, -10, 0, -10, true, false);
+//			if (other_city5.Equals (other_city1) || other_city5.Equals(other_city2) || other_city5.Equals(other_city3)
+//				|| other_city5.Equals(other_city4)) {
+//				other_city5 = PlayerLocation.Locations.surrounding (curr_city, -100, 0, -100, true, false);
+//			}
+//			QuarterFinalTeams [5] = (other_city5 + " " + animals [char.ToUpper (other_city5 [0]) - 65]);
+//
+//			GameObject.Find ("Team6").GetComponent<Text> ().text = (other_city5 + " " + animals [char.ToUpper (other_city5 [0]) - 65]);
+
+//			Transform team6 = canvas.Find ("Team6");
+//			Text setTeam6 = team6.GetComponent<Text> ();
+//			setTeam6.text = (other_city5 + " " + animals [char.ToUpper (other_city5 [0]) - 65]);
+
+//			string other_city6 = PlayerLocation.Locations.surrounding (curr_city, -10, -10, -10, true, true);
+//			if (other_city6.Equals (other_city1) || other_city6.Equals(other_city2) || other_city6.Equals(other_city3)
+//				|| other_city6.Equals(other_city4) || other_city6.Equals(other_city5)) {
+//				other_city5 = PlayerLocation.Locations.surrounding (curr_city, -100, -100, -100, true, true);
+//			}
+//			QuarterFinalTeams [6] = (other_city6 + " " + animals [char.ToUpper (other_city6 [0]) - 65]);
+//
+//			GameObject.Find ("Team7").GetComponent<Text> ().text = (other_city6 + " " + animals [char.ToUpper (other_city6 [0]) - 65]);
+
+//			Transform team7 = canvas.Find ("Team7");
+//			Text setTeam7 = team7.GetComponent<Text> ();
+//			setTeam7.text = (other_city6 + " " + animals [char.ToUpper (other_city6 [0]) - 65]);
 		}
+
+		QuarterFinalLabels = new GameObject[]
+		{
+			canvas.Find("Team1").gameObject,
+			canvas.Find("Team2").gameObject,
+			canvas.Find("Team3").gameObject,
+			canvas.Find("Team4").gameObject,
+			canvas.Find("Team5").gameObject,
+			canvas.Find("Team6").gameObject,
+			canvas.Find("Team7").gameObject,
+		};
 
         SemiFinalLabels = new GameObject[]
         {
@@ -209,35 +341,25 @@ public class StandingsBehaviour : MonoBehaviour {
             canvas.transform.Find("Finalist2").GetComponent<Text>().text = semiFinalWinner;
             DiscolourNonWinners(SemiFinalLabels, new string[] { semiFinalWinner });
         }
-
-		/* User does not have location services on */
-		if (!Input.location.isEnabledByUser) {
-//			location_on = false;
-//			yield break;
-		}
-
-		/* User does have location service on */
-		Input.location.Start();
-
-		start_time = 0;
-
-		/* Wait up to 20 seconds for location services to initialize */
-		while ((Input.location.status == LocationServiceStatus.Initializing) && (start_time <= 20)) {
-			yield return new WaitForSeconds(1);
-			start_time++;
-		}
-
-		/* Initialization failed or timed-out */
-		if (Input.location.status != LocationServiceStatus.Running) {
-			location_on = false;
-			yield break;
-		} 
-
-		/* Location service initialization was successful */
-		else {
-			location_on = true;
-		}
     }
+
+	string[] newCoordinates(float lat, float longi, int km_offset1, int km_offset2) {
+
+		string[] new_coords = new string[2];
+
+		/* Convert offset (in km) to degrees. 
+					1 degree in Google maps = 111.32 km */
+		double degree1 = km_offset1 * (1 / 111.32);
+		double degree2 = km_offset2 * (1 / 111.32);
+
+		double lat2 = lat + degree1;
+		/* longitude */
+		new_coords[1] = (longi + degree2 / Mathf.Cos ((float) (lat2 * Mathf.PI / 180))).ToString ();
+		/* latitude */
+		new_coords[0] = lat2.ToString ();
+
+		return new_coords;
+	}
 
     string SerializeStringArray(string[] values)
     {
@@ -257,43 +379,29 @@ public class StandingsBehaviour : MonoBehaviour {
 		string[] teams = new string[6];
         
 		/* If location services are off, use default teams */
-		if (!location_on) {
+		if (Input.location.status == LocationServiceStatus.Running) {
 			teams [0] = "East Coast Eagles";
 			teams [1] = "Northern Owls";
 			teams [2] = "Southern Snakes";
 			teams [3] = "Midwest Minstrels";
 			teams [4] = "Cape Camels";
 			teams [5] = "Gulf Gophers";
-		}
+		} 
 
-		/* Else player has location services on */
+		/* Location services are enabled, use local teams previously constructed */
 		else {
-			PlayerLocation.Locations.locate (location_on, 0, 0);
-			string curr_city = PlayerLocation.Locations.city;
-			teams [0] = curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65];
-
-			string other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, 10, 10, false, true);
-			teams [1] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
-		
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 10, 10, true, true);
-			teams [2] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
-
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 10, 0, 10, true, false);
-			teams [3] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
-
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, 0, -10, -10, false, true);
-			teams [4] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
-
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, 0, -10, true, false);
-			teams [5] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
-
-			other_city = PlayerLocation.Locations.surrounding (location_on, curr_city, -10, -10, -10, true, true);
-			teams [6] = other_city + " " + animals [char.ToUpper (other_city [0]) - 65];
+			teams [0] = QuarterFinalTeams [1];
+			teams [1] = QuarterFinalTeams [2];
+			teams [2] = QuarterFinalTeams [3];
+			teams [3] = QuarterFinalTeams [4];
+			teams [4] = QuarterFinalTeams [5];
+			teams [5] = QuarterFinalTeams [6];
 		}
 
         string winner2 = teams[Random.Range(0, 1+1)];
         string winner3 = teams[Random.Range(2, 3+1)];
         string winner4 = teams[Random.Range(4, 5+1)];
+
         return new string[] { winner2, winner3, winner4 };
     }
     string DecideSemiFinalWinner()
