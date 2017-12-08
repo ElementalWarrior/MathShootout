@@ -27,7 +27,9 @@ public class NetBehaviour : MonoBehaviour {
             {
                 if(puckValue % 2 == 0)
                 {
-                    ShootoutControllerBehaviour.Controller.IncrementScore(5);
+                    int pts = 5;
+                    ShootoutControllerBehaviour.Controller.IncrementScore(pts);
+                    PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) + pts);
                     correctNet = true;
                 } else
                 {

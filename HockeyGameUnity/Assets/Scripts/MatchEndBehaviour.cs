@@ -17,6 +17,12 @@ public class MatchEndBehaviour : MonoBehaviour {
         SpriteRenderer srWin = GameObject.Find("endwin").GetComponent<SpriteRenderer>();
         SpriteRenderer srLose = GameObject.Find("endlose").GetComponent<SpriteRenderer>();
 
+        if(PlayerPrefs.GetInt("DonCherryMode", 0) == 1)
+        {
+            srWin.sprite = Resources.Load<Sprite>("MatchEnd/endwin_doncherry");
+            srLose.sprite = Resources.Load<Sprite>("MatchEnd/endlose_doncherry");
+        }
+
         if (WonMatch)
         {
             srWin.color = SetAlpha(srWin.GetComponent<SpriteRenderer>().color, 1);

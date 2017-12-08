@@ -49,8 +49,13 @@ public class StandingsBehaviour : MonoBehaviour {
 		"Zebras"
 	};
 
-	// Use this for initialization
-	void Start () {
+    private GameObject Shop;
+
+    public static bool ShopOpen;
+
+    // Use this for initialization
+    void Start () {
+        Shop = Resources.Load<GameObject>("Standings/shop");
 		CurrentRound = Round.QuarterFinal;
 
         if (PlayerPrefs.HasKey("CurrentRound"))
@@ -437,4 +442,25 @@ public class StandingsBehaviour : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void OpenShop ()
+    {
+        if(ShopOpen)
+        {
+            return;
+        }
+        GameObject itemBeingCreated = GameObject.Instantiate(Shop, GameObject.Find("Canvas").transform);
+        itemBeingCreated.name = "Shop";
+        ShopOpen = true;
+    }
+
+    public void CloseShop()
+    {
+        if (!ShopOpen)
+        {
+            return;
+        }
+        ShopOpen = false;
+        GameObject.Destroy(GameObject.Find("Shop"));
+    }
 }

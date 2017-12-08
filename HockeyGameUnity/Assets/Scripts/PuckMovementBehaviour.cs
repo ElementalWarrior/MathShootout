@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class PuckMovementBehaviour : MonoBehaviour {
     DateTime? timeFadeStart = null;
@@ -9,6 +10,11 @@ public class PuckMovementBehaviour : MonoBehaviour {
     bool _isMiss = true;
 	// Use this for initialization
 	void Start () {
+        if(PlayerPrefs.GetInt("CanadaPuck", 0) == 1)
+        {
+            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Shootout/puck_canada_shootout");
+            transform.Find("Canvas").Find("Text").GetComponent<Text>().color = Color.blue;
+        }
 	}
 
     public void Fadeout(bool isMiss = true)
