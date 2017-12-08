@@ -27,6 +27,9 @@ public class NetBehaviour : MonoBehaviour {
             {
                 if(puckValue % 2 == 0)
                 {
+
+
+                    //set points
                     int pts = 5;
                     ShootoutControllerBehaviour.Controller.IncrementScore(pts);
                     PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) + pts);
@@ -46,6 +49,16 @@ public class NetBehaviour : MonoBehaviour {
                     ShootoutControllerBehaviour.Controller.IncrementScore(-2);
                 }
             }
+        }
+        if(correctNet)
+        {
+            //play sound
+            GameObject.Find("goal_sound").GetComponent<AudioSource>().Play();
+        } else
+        {
+
+            //play sound
+            GameObject.Find("buzzer").GetComponent<AudioSource>().Play();
         }
         Log.Submit("NetCollision", correctNet);
     }
