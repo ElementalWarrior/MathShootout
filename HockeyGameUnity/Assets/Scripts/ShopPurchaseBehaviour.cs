@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopPurchaseBehaviour : MonoBehaviour {
 
@@ -37,10 +38,11 @@ public class ShopPurchaseBehaviour : MonoBehaviour {
             if (PlayerPrefs.GetInt("Points", 0) >= 1000)
             {
                 PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) - 1000);
-                PlayerPrefs.SetInt("DontCherryMode", 1);
+                PlayerPrefs.SetInt("DonCherryMode", 1);
                 Color col = Color.white;
                 col.a = 1;
                 GameObject.Find("purchased_striker").GetComponent<SpriteRenderer>().color = col;
+                GameObject.Find("Points").GetComponent<Text>().text = "Points: " + PlayerPrefs.GetInt("Points").ToString();
             }
         }
     }
@@ -60,6 +62,7 @@ public class ShopPurchaseBehaviour : MonoBehaviour {
                 Color col = Color.white;
                 col.a = 1;
                 GameObject.Find("purchased_puck").GetComponent<SpriteRenderer>().color = col;
+                GameObject.Find("Points").GetComponent<Text>().text = "Points: " + PlayerPrefs.GetInt("Points").ToString();
             }
         }
 
