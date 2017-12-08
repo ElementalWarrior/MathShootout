@@ -24,6 +24,10 @@ public class ShopPurchaseBehaviour : MonoBehaviour {
         {
             PurchasePuck();
         }
+        else if (name == "purchased_sabers")
+        {
+            PurchaseSabers();
+        }
     }
 
     public void PurchaseStriker()
@@ -62,6 +66,26 @@ public class ShopPurchaseBehaviour : MonoBehaviour {
                 Color col = Color.white;
                 col.a = 1;
                 GameObject.Find("purchased_puck").GetComponent<SpriteRenderer>().color = col;
+                GameObject.Find("Points").GetComponent<Text>().text = "Points: " + PlayerPrefs.GetInt("Points").ToString();
+            }
+        }
+
+    }
+    public void PurchaseSabers()
+    {
+        if (!StandingsBehaviour.ShopOpen)
+        {
+            return;
+        }
+        if (PlayerPrefs.GetInt("SaberSounds", 0) != 1)
+        {
+            if (PlayerPrefs.GetInt("Points", 0) >= 100 || true)
+            {
+                PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) - 100);
+                PlayerPrefs.SetInt("SaberSounds", 1);
+                Color col = Color.white;
+                col.a = 1;
+                GameObject.Find("purchased_sabers").GetComponent<SpriteRenderer>().color = col;
                 GameObject.Find("Points").GetComponent<Text>().text = "Points: " + PlayerPrefs.GetInt("Points").ToString();
             }
         }

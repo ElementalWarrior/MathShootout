@@ -16,7 +16,11 @@ public class ShopBehaviour : MonoBehaviour {
         {
             GameObject.Find("purchased_striker").GetComponent<SpriteRenderer>().color = Color.white;
         }
-	}
+        if (PlayerPrefs.GetInt("SaberSounds", 0) == 1)
+        {
+            GameObject.Find("purchased_sabers").GetComponent<SpriteRenderer>().color = Color.white;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {

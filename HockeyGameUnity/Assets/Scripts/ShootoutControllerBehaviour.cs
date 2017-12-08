@@ -27,6 +27,10 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        if(PlayerPrefs.GetInt("SaberSounds", 0) == 1)
+        {
+            GameObject.Find("shoot").GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Shootout/saber_sound");
+        }
         GameObject.Destroy(GameObject.Find("menu_music"));
         if(PlayerPrefs.HasKey("Difficulty"))
         {

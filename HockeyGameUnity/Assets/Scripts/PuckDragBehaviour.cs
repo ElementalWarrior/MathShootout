@@ -13,7 +13,11 @@ public class PuckDragBehaviour : MonoBehaviour {
         transform.position = new Vector3(0, -3.39f);
 
 		shoot = Resources.Load<AudioClip> ("Shootout/shoot");
-		audio = gameObject.AddComponent<AudioSource> ();
+        if (PlayerPrefs.GetInt("SaberSounds", 0) == 1)
+        {
+            shoot = Resources.Load<AudioClip>("Shootout/saber_sound");
+        }
+        audio = gameObject.AddComponent<AudioSource> ();
 	}
     private bool _dragging = false;
 	// Update is called once per frame
