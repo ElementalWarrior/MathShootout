@@ -57,7 +57,8 @@ public class MenuButtonBehaviour : MonoBehaviour {
     public void Play()
     {
         Assets.Scripts.Locations.LoadData();
-        var foo = Assets.Scripts.Locations.First();
+//        Assets.Scripts.Locations.First();
+
         if (!PlayerPrefs.HasKey("TeamName"))
         {
             SceneManager.LoadScene("TeamName");

@@ -84,23 +84,18 @@ public class StandingsBehaviour : MonoBehaviour {
 			float latitude = Input.location.lastData.latitude;
 			float longitude = Input.location.lastData.longitude;
 
-			string[] c0 = new string[] {
-				latitude.ToString(),
-				longitude.ToString()
-			};
-
 			/* Open cities database */
 
 			QuarterFinalTeams = new string[7];
 
 			GameObject.Find ("Team1").GetComponent<Text>().text = "IM IN HERE";
 
-			string[] c1;
-			string[] c2;
-			string[] c3;
-			string[] c4;
-			string[] c5;
-			string[] c6;
+			Assets.Scripts.Locations.Location loc1;
+			Assets.Scripts.Locations.Location loc2;
+			Assets.Scripts.Locations.Location loc3;
+			Assets.Scripts.Locations.Location loc4;
+			Assets.Scripts.Locations.Location loc5;
+			Assets.Scripts.Locations.Location loc6;
 
 			string[] cities = new string[7];
 
@@ -108,48 +103,40 @@ public class StandingsBehaviour : MonoBehaviour {
 			int loop = 0;
 			int multiplier = -9;
 
-			string line;
-
 			while (count < 7) {
 
 				multiplier = multiplier + 10;
 
-				c1 = newCoordinates (latitude, longitude, 0, multiplier * 30);
-				c2 = newCoordinates (latitude, longitude, multiplier * 30, 0);
-				c3 = newCoordinates (latitude, longitude, multiplier * 30, multiplier * 30);
-				c4 = newCoordinates (latitude, longitude, 0, multiplier * -30);
-				c5 = newCoordinates (latitude, longitude, multiplier * -30, 0);
-				c6 = newCoordinates (latitude, longitude, multiplier * -30, multiplier * -30);
+				loc1 = newCoordinates (latitude, longitude, 0, multiplier * 30);
+				loc2 = newCoordinates (latitude, longitude, multiplier * 30, 0);
+				loc3 = newCoordinates (latitude, longitude, multiplier * 30, multiplier * 30);
+				loc4 = newCoordinates (latitude, longitude, 0, multiplier * -30);
+				loc5 = newCoordinates (latitude, longitude, multiplier * -30, 0);
+				loc6 = newCoordinates (latitude, longitude, multiplier * -30, multiplier * -30);
 
 				while ((loop < 5520) && (count < 7)) {
-					line = PlayerLocation.Locations.locations [loop];
-					if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c0 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c0 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					Assets.Scripts.Locations.Location data = Assets.Scripts.Locations.data [loop];
+
+					if ((data.Latitude == latitude) && (data.Longitude == longitude)) {
+						cities [count] = data.City;
 						count++;
-					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c1 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c1 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					} else if ((data.Latitude == loc1.Latitude) && (data.Longitude == loc1.Longitude)) {
+						cities [count] = data.City;
 						count++;
-					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c2 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c2 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					} else if ((data.Latitude == loc2.Latitude) && (data.Longitude == loc2.Longitude)) {
+						cities [count] = data.City;
 						count++;
-					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c3 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c3 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					} else if ((data.Latitude == loc3.Latitude) && (data.Longitude == loc3.Longitude)) {
+						cities [count] = data.City;
 						count++;
-					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c4 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c4 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					} else if ((data.Latitude == loc4.Latitude) && (data.Longitude == loc4.Longitude)) {
+						cities [count] = data.City;
 						count++;
-					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c5 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c5 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					} else if ((data.Latitude == loc5.Latitude) && (data.Longitude == loc5.Longitude)) {
+						cities [count] = data.City;
 						count++;
-					} else if (line.Substring(line.IndexOf(","), line.LastIndexOf(",")).Contains (c6 [0]) 
-						|| line.Substring(line.LastIndexOf(",")).Contains (c6 [1])) {
-						cities [count] = line.Substring (0, line.IndexOf (","));
+					} else if ((data.Latitude == loc6.Latitude) && (data.Longitude == loc6.Longitude)) {
+						cities [count] = data.City;
 						count++;
 					}
 
@@ -177,87 +164,6 @@ public class StandingsBehaviour : MonoBehaviour {
 
 			QuarterFinalTeams [6] = (cities[6] + " " + animals [char.ToUpper ((cities[6]) [0]) - 65]);
 			GameObject.Find ("Team7").GetComponent<Text>().text = QuarterFinalTeams[6];
-
-//			PlayerLocation.Locations.locate (0, 0);
-//			string curr_city = PlayerLocation.Locations.city;
-//			QuarterFinalTeams [0] = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
-//
-//			GameObject.Find ("Team1").GetComponent<Text>().text = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
-
-//			Transform team1 = canvas.Find ("Team1");
-//			Text setTeam1 = team1.GetComponent<Text> ();
-//			setTeam1.text = (curr_city + " " + animals [char.ToUpper (curr_city [0]) - 65]);
-
-//			string other_city1 = PlayerLocation.Locations.surrounding (curr_city, 0, 10, 10, false, true);
-//			QuarterFinalTeams [1] = (other_city1 + " " + animals [char.ToUpper (other_city1 [0]) - 65]);
-
-//			Transform team2 = canvas.Find ("Team2");
-//			Text setTeam2 = team2.GetComponent<Text> ();
-//			setTeam2.text = (other_city1 + " " + animals [char.ToUpper (other_city1 [0]) - 65]);
-
-//			GameObject.Find ("Team2").GetComponent<Text> ().text = (other_city1 + " " + animals [char.ToUpper (other_city1 [0]) - 65]);
-//
-//			string other_city2 = PlayerLocation.Locations.surrounding (curr_city, 10, 10, 10, true, true);
-//			if (other_city2.Equals (other_city1)) {
-//				other_city2 = PlayerLocation.Locations.surrounding (curr_city, 100, 100, 100, true, true);
-//			}
-//			QuarterFinalTeams [2] = (other_city2 + " " + animals [char.ToUpper (other_city2 [0]) - 65]);
-//
-//			GameObject.Find ("Team3").GetComponent<Text> ().text = (other_city2 + " " + animals [char.ToUpper (other_city2 [0]) - 65]);
-
-//			Transform team3 = canvas.Find ("Team3");
-//			Text setTeam3 = team3.GetComponent<Text> ();
-//			setTeam3.text = (other_city2 + " " + animals [char.ToUpper (other_city2 [0]) - 65]);
-
-//			string other_city3 = PlayerLocation.Locations.surrounding (curr_city, 10, 0, 10, true, false);
-//			if (other_city3.Equals (other_city1) || other_city3.Equals(other_city2)) {
-//				other_city3 = PlayerLocation.Locations.surrounding (curr_city, 100, 0, 100, true, false);
-//			}
-//			QuarterFinalTeams [3] = (other_city3 + " " + animals [char.ToUpper (other_city3 [0]) - 65]);
-//
-//			GameObject.Find ("Team4").GetComponent<Text> ().text = (other_city3 + " " + animals [char.ToUpper (other_city3 [0]) - 65]);
-
-//			Transform team4 = canvas.Find ("Team4");
-//			Text setTeam4 = team4.GetComponent<Text> ();
-//			setTeam4.text = (other_city3 + " " + animals [char.ToUpper (other_city3 [0]) - 65]);
-
-//			string other_city4 = PlayerLocation.Locations.surrounding (curr_city, 0, -10, -10, false, true);
-//			if (other_city4.Equals (other_city1) || other_city4.Equals(other_city2) || other_city4.Equals(other_city3)) {
-//				other_city4 = PlayerLocation.Locations.surrounding (curr_city, 0, -100, -100, false, true);
-//			}
-//			QuarterFinalTeams [4] = (other_city4 + " " + animals [char.ToUpper (other_city4 [0]) - 65]);
-//
-//			GameObject.Find ("Team5").GetComponent<Text> ().text = (other_city4 + " " + animals [char.ToUpper (other_city4 [0]) - 65]);
-
-//			Transform team5 = canvas.Find ("Team5");
-//			Text setTeam5 = team5.GetComponent<Text> ();
-//			setTeam5.text = (other_city4 + " " + animals [char.ToUpper (other_city4 [0]) - 65]);
-
-//			string other_city5 = PlayerLocation.Locations.surrounding (curr_city, -10, 0, -10, true, false);
-//			if (other_city5.Equals (other_city1) || other_city5.Equals(other_city2) || other_city5.Equals(other_city3)
-//				|| other_city5.Equals(other_city4)) {
-//				other_city5 = PlayerLocation.Locations.surrounding (curr_city, -100, 0, -100, true, false);
-//			}
-//			QuarterFinalTeams [5] = (other_city5 + " " + animals [char.ToUpper (other_city5 [0]) - 65]);
-//
-//			GameObject.Find ("Team6").GetComponent<Text> ().text = (other_city5 + " " + animals [char.ToUpper (other_city5 [0]) - 65]);
-
-//			Transform team6 = canvas.Find ("Team6");
-//			Text setTeam6 = team6.GetComponent<Text> ();
-//			setTeam6.text = (other_city5 + " " + animals [char.ToUpper (other_city5 [0]) - 65]);
-
-//			string other_city6 = PlayerLocation.Locations.surrounding (curr_city, -10, -10, -10, true, true);
-//			if (other_city6.Equals (other_city1) || other_city6.Equals(other_city2) || other_city6.Equals(other_city3)
-//				|| other_city6.Equals(other_city4) || other_city6.Equals(other_city5)) {
-//				other_city5 = PlayerLocation.Locations.surrounding (curr_city, -100, -100, -100, true, true);
-//			}
-//			QuarterFinalTeams [6] = (other_city6 + " " + animals [char.ToUpper (other_city6 [0]) - 65]);
-//
-//			GameObject.Find ("Team7").GetComponent<Text> ().text = (other_city6 + " " + animals [char.ToUpper (other_city6 [0]) - 65]);
-
-//			Transform team7 = canvas.Find ("Team7");
-//			Text setTeam7 = team7.GetComponent<Text> ();
-//			setTeam7.text = (other_city6 + " " + animals [char.ToUpper (other_city6 [0]) - 65]);
 		}
 
 		QuarterFinalLabels = new GameObject[]
@@ -348,9 +254,7 @@ public class StandingsBehaviour : MonoBehaviour {
         }
     }
 
-	string[] newCoordinates(float lat, float longi, int km_offset1, int km_offset2) {
-
-		string[] new_coords = new string[2];
+	Assets.Scripts.Locations.Location newCoordinates(float lat, float longi, int km_offset1, int km_offset2) {
 
 		/* Convert offset (in km) to degrees. 
 					1 degree in Google maps = 111.32 km */
@@ -358,12 +262,14 @@ public class StandingsBehaviour : MonoBehaviour {
 		double degree2 = km_offset2 * (1 / 111.32);
 
 		double lat2 = lat + degree1;
-		/* longitude */
-		new_coords[1] = (longi + degree2 / Mathf.Cos ((float) (lat2 * Mathf.PI / 180))).ToString ();
-		/* latitude */
-		new_coords[0] = lat2.ToString ();
 
-		return new_coords;
+		Assets.Scripts.Locations.Location new_loc = new Assets.Scripts.Locations.Location {
+			City = "",
+			Latitude = lat2,
+			Longitude = (longi + degree2 / Mathf.Cos ((float)(lat2 * Mathf.PI / 180)))
+		};
+
+		return new_loc;
 	}
 
     string SerializeStringArray(string[] values)
