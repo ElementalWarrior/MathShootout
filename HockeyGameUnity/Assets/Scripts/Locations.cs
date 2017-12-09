@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using UnityEngine;
+
 namespace Assets.Scripts
 {
 	public class Locations
@@ -12,14 +14,14 @@ namespace Assets.Scripts
 			public string City { get; set; }
 			public double Latitude { get; set; }
 			public double Longitude { get; set; }
+            public double Distance { get; set; }
 		}
 		public static Location[] data;
 		public static void LoadData()
 		{
-			string path = "Assets/Resources/cities.csv";
-
-			//Read the text from directly from the test.txt file
-			StreamReader reader = new StreamReader(path);
+            TextAsset csv = Resources.Load<TextAsset>("cities");
+            //Read the text from directly from the test.txt file
+            StreamReader reader = new StreamReader(new MemoryStream(csv.bytes));
 			int cnt = 0;
 			while(!reader.EndOfStream)
 			{

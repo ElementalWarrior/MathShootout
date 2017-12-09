@@ -27,6 +27,10 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        //reset powerups
+        PowerupBehaviour.PuckActive = false;
+        PowerupBehaviour.ScoreMultiplier = 1;
+
         GameObject.Destroy(GameObject.Find("menu_music"));
         if(PlayerPrefs.HasKey("Difficulty"))
         {

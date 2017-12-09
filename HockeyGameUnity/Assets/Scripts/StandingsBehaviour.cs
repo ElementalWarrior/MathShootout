@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -53,6 +55,33 @@ public class StandingsBehaviour : MonoBehaviour {
 
     public static bool ShopOpen;
 
+    private double rad2deg(double rad)
+    {
+        return (rad / Math.PI * 180.0);
+    }
+
+    private double deg2rad(double deg)
+    {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2, char unit = 'K')
+    {
+        double theta = lon1 - lon2;
+        double dist = Math.Sin(deg2rad(lat1)) * Math.Sin(deg2rad(lat2)) + Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) * Math.Cos(deg2rad(theta));
+        dist = Math.Acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K')
+        {
+            dist = dist * 1.609344;
+        }
+        else if (unit == 'N')
+        {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
     // Use this for initialization
     void Start () {
         Shop = Resources.Load<GameObject>("Standings/shop");
@@ -78,92 +107,46 @@ public class StandingsBehaviour : MonoBehaviour {
         canvas.Find("Winner1").gameObject.SetActive(false);
         canvas.Find("Finalist1").gameObject.SetActive(false);
 
-		/* Location services enabled */
-		if (Input.location.status == LocationServiceStatus.Running) {
+        /* Location services enabled */
+        if (Input.location.status == LocationServiceStatus.Running) {
 
-			float latitude = Input.location.lastData.latitude;
-			float longitude = Input.location.lastData.longitude;
+            float latitude = Input.location.lastData.latitude;
+            float longitude = Input.location.lastData.longitude;
+            //float latitude = 49.798654f;
+            //float longitude = -119.512252f;
 
-			/* Open cities database */
+            /* Open cities database */
 
-			QuarterFinalTeams = new string[7];
+            QuarterFinalTeams = new string[7];
 
-			GameObject.Find ("Team1").GetComponent<Text>().text = "IM IN HERE";
+            Locations.Location[] cities = new Locations.Location[8];
 
-			Assets.Scripts.Locations.Location loc1;
-			Assets.Scripts.Locations.Location loc2;
-			Assets.Scripts.Locations.Location loc3;
-			Assets.Scripts.Locations.Location loc4;
-			Assets.Scripts.Locations.Location loc5;
-			Assets.Scripts.Locations.Location loc6;
+            double max = distance(latitude, longitude, Locations.data[0].Latitude, Locations.data[0].Longitude);
+            for (int i = 0; i < Locations.data.Length; i++)
+            {
+                Locations.Location location = Locations.data[i];
+                double dist = distance(latitude, longitude, location.Latitude, location.Longitude);
+                location.Distance = dist;
+                if(i < 8)
+                {
+                    cities[i] = location;
+                    max = Math.Max(dist, max);
+                } else
+                {
+                    if(dist < max)
+                    {
+                        cities[7] = location;
+                        Array.Sort(cities, new Comparison<Locations.Location>((obj1, obj2) => obj1.Distance.CompareTo((Double)obj2.Distance)));
+                    }
+                }
+            }
 
-			string[] cities = new string[7];
-
-			int count = 0;
-			int loop = 0;
-			int multiplier = -9;
-
-			while (count < 7) {
-
-				multiplier = multiplier + 10;
-
-				loc1 = newCoordinates (latitude, longitude, 0, multiplier * 30);
-				loc2 = newCoordinates (latitude, longitude, multiplier * 30, 0);
-				loc3 = newCoordinates (latitude, longitude, multiplier * 30, multiplier * 30);
-				loc4 = newCoordinates (latitude, longitude, 0, multiplier * -30);
-				loc5 = newCoordinates (latitude, longitude, multiplier * -30, 0);
-				loc6 = newCoordinates (latitude, longitude, multiplier * -30, multiplier * -30);
-
-				while ((loop < 5520) && (count < 7)) {
-					Assets.Scripts.Locations.Location data = Assets.Scripts.Locations.data [loop];
-
-					if ((data.Latitude == latitude) && (data.Longitude == longitude)) {
-						cities [count] = data.City;
-						count++;
-					} else if ((data.Latitude == loc1.Latitude) && (data.Longitude == loc1.Longitude)) {
-						cities [count] = data.City;
-						count++;
-					} else if ((data.Latitude == loc2.Latitude) && (data.Longitude == loc2.Longitude)) {
-						cities [count] = data.City;
-						count++;
-					} else if ((data.Latitude == loc3.Latitude) && (data.Longitude == loc3.Longitude)) {
-						cities [count] = data.City;
-						count++;
-					} else if ((data.Latitude == loc4.Latitude) && (data.Longitude == loc4.Longitude)) {
-						cities [count] = data.City;
-						count++;
-					} else if ((data.Latitude == loc5.Latitude) && (data.Longitude == loc5.Longitude)) {
-						cities [count] = data.City;
-						count++;
-					} else if ((data.Latitude == loc6.Latitude) && (data.Longitude == loc6.Longitude)) {
-						cities [count] = data.City;
-						count++;
-					}
-
-					loop++;
-				}
-			}
-
-			QuarterFinalTeams [0] = (cities[0] + " " + animals [char.ToUpper ((cities[0]) [0]) - 65]);
-			GameObject.Find ("Team1").GetComponent<Text>().text = QuarterFinalTeams[0];
-
-			QuarterFinalTeams [1] = (cities[1] + " " + animals [char.ToUpper ((cities[1]) [0]) - 65]);
-			GameObject.Find ("Team2").GetComponent<Text>().text = QuarterFinalTeams[1];
-
-			QuarterFinalTeams [2] = (cities[2] + " " + animals [char.ToUpper ((cities[2]) [0]) - 65]);
-			GameObject.Find ("Team3").GetComponent<Text>().text = QuarterFinalTeams[2];
-
-			QuarterFinalTeams [3] = (cities[3] + " " + animals [char.ToUpper ((cities[3]) [0]) - 65]);
-			GameObject.Find ("Team4").GetComponent<Text>().text = QuarterFinalTeams[3];
-
-			QuarterFinalTeams [4] = (cities[4] + " " + animals [char.ToUpper ((cities[4]) [0]) - 65]);
-			GameObject.Find ("Team5").GetComponent<Text>().text = QuarterFinalTeams[4];
-
-			QuarterFinalTeams [5] = (cities[5] + " " + animals [char.ToUpper ((cities[5]) [0]) - 65]);
-			GameObject.Find ("Team6").GetComponent<Text>().text = QuarterFinalTeams[5];
-
-			QuarterFinalTeams [6] = (cities[6] + " " + animals [char.ToUpper ((cities[6]) [0]) - 65]);
-			GameObject.Find ("Team7").GetComponent<Text>().text = QuarterFinalTeams[6];
+            //add animal names to end of city names
+            for (int i = 0; i < 7; i++)
+            {
+                QuarterFinalTeams[i] = (cities[i].City + " " + animals[char.ToUpper(cities[i].City[0]) - 65]);
+                GameObject.Find("Team" + (i + 1)).GetComponent<Text>().text = QuarterFinalTeams[i];
+            }
 		}
 
 		QuarterFinalLabels = new GameObject[]
@@ -309,16 +292,16 @@ public class StandingsBehaviour : MonoBehaviour {
 			teams [5] = QuarterFinalTeams [6];
 		}
 
-        string winner2 = teams[Random.Range(0, 1+1)];
-        string winner3 = teams[Random.Range(2, 3+1)];
-        string winner4 = teams[Random.Range(4, 5+1)];
+        string winner2 = teams[UnityEngine.Random.Range(0, 1+1)];
+        string winner3 = teams[UnityEngine.Random.Range(2, 3+1)];
+        string winner4 = teams[UnityEngine.Random.Range(4, 5+1)];
 
         return new string[] { winner2, winner3, winner4 };
     }
     string DecideSemiFinalWinner()
     {
         string[] quarterFinalWinners = DeserializeStringArray(PlayerPrefs.GetString("QuarterFinalWinners"));
-        return quarterFinalWinners[Random.Range(1, 2 + 1)];
+        return quarterFinalWinners[UnityEngine.Random.Range(1, 2 + 1)];
     }
 
     void DiscolourNonWinners(GameObject[] labels, string[] winners)
