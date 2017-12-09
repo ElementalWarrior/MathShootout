@@ -33,7 +33,13 @@ public class PuckMovementBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+        if(PowerupBehaviour.PuckActive)
+        {
+            this.transform.localScale = new Vector3(3, 3, 1);
+        } else
+        {
+            this.transform.localScale = new Vector3(1.5f, 1.5f, 1);
+        }
         //fadeout if hit backboard or past the outer edges of the nets
         if((transform.position.y > 1 || Mathf.Abs(transform.position.x) > 8.5) && timeFadeStart == null)
         {
