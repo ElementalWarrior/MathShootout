@@ -16,7 +16,7 @@ public class IntroScript : MonoBehaviour {
 	void Start () {
 		cutscenes = Resources.LoadAll<Sprite> ("Intro/Cutscene");
 		primary_masks = Resources.LoadAll<Sprite> ("Intro/primary_mask");
-        current_image = GameObject.Find("Cutscene1").GetComponent<SpriteRenderer> ();
+        current_image = GameObject.Find("Cutscene01").GetComponent<SpriteRenderer> ();
 		primary_mask = GameObject.Find("primary_mask").GetComponent<SpriteRenderer> ();
 
         SpriteRenderer secondary_mask = GameObject.Find("secondary_mask").GetComponent<SpriteRenderer>();
