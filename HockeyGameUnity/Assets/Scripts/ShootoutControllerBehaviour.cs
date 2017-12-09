@@ -128,6 +128,7 @@ public class ShootoutControllerBehaviour : MonoBehaviour {
     }
     public void IncrementScore(int add)
     {
+        add *= PowerupBehaviour.ScoreMultiplier;
         int currentValue = int.Parse(GameObject.Find("ScoreNumber").GetComponent<Text>().text);
         GameObject.Find("ScoreNumber").GetComponent<Text>().text = (currentValue + add).ToString();
     }

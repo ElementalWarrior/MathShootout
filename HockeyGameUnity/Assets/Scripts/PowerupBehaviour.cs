@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PowerupBehaviour : MonoBehaviour {
     public static bool PuckActive = false;
+    public static int ScoreMultiplier = 1;
 	// Use this for initialization
 	void Start () {
 		
@@ -12,7 +14,7 @@ public class PowerupBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        GameObject.Find("TotalPoints").GetComponent<Text>().text = PlayerPrefs.GetInt("Points", 0).ToString();
 	}
 
     public void OnMouseUp()
@@ -24,6 +26,10 @@ public class PowerupBehaviour : MonoBehaviour {
         if (name == "powerup_time")
         {
             PowerupTime();
+        }
+        if (name == "powerup_double")
+        {
+            PowerupDouble();
         }
     }
 
@@ -45,6 +51,14 @@ public class PowerupBehaviour : MonoBehaviour {
         {
             GameObject.Find("Main Camera").GetComponent<ShootoutControllerBehaviour>().FinishAt = GameObject.Find("Main Camera").GetComponent<ShootoutControllerBehaviour>().FinishAt.Add(TimeSpan.FromSeconds(20));
             PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) - 200);
+        }
+    }
+    private void PowerupDouble()
+    {
+        if (PlayerPrefs.GetInt("Points", 0) >= 300)
+        {
+            ScoreMultiplier*=2;
+            PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) - 300);
         }
     }
 }
