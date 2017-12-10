@@ -59,7 +59,7 @@ public class ShopPurchaseBehaviour : MonoBehaviour {
         }
         if (PlayerPrefs.GetInt("CanadaPuck", 0) != 1)
         {
-            if (PlayerPrefs.GetInt("Points", 0) >= 500 || true)
+            if (PlayerPrefs.GetInt("Points", 0) >= 500)
             {
                 PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) - 500);
                 PlayerPrefs.SetInt("CanadaPuck", 1);
@@ -79,7 +79,7 @@ public class ShopPurchaseBehaviour : MonoBehaviour {
         }
         if (PlayerPrefs.GetInt("SaberSounds", 0) != 1)
         {
-            if (PlayerPrefs.GetInt("Points", 0) >= 100 || true)
+            if (PlayerPrefs.GetInt("Points", 0) >= 100)
             {
                 PlayerPrefs.SetInt("Points", PlayerPrefs.GetInt("Points", 0) - 100);
                 PlayerPrefs.SetInt("SaberSounds", 1);
